@@ -1,0 +1,51 @@
+name: Sync LICENSE.md to UPM
+
+on:
+  push:
+    branches: [ main, master, develop ]
+    paths: [ 'LICENSE.md' ]
+  workflow_dispatch:
+
+jobs:
+  sync-license:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Copy LICENSE.md to UPM directory
+      run: |
+        # Copy LICENSE.md from root to upm directory
+        cp LICENSE.md upm/LICENSE.md
+        echo "LICENSE.md successfully copied to upm/"
+
+    - name: Check for changes
+      id: check-changes
+      run: |
+        # Check if there are changes in git
+        if git diff --quiet upm/LICENSE.md; then
+          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "No changes in LICENSE.md"
+        else
+          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in LICENSE.md"
+        fi
+
+    - name: Commit and push changes
+      if: steps.check-changes.outputs.changes == 'true'
+      run: |
+        # Configure git user
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+        # Add changes and commit
+        git add upm/LICENSE.md
+        git commit -m "ci: Sync LICENSE.md to UPM directory"
+        git push
+
+    - name: No changes detected
+      if: steps.check-changes.outputs.changes == 'false'
+      run: echo "LICENSE.md in UPM directory is already up to date"

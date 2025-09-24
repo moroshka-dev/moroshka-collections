@@ -1,0 +1,18 @@
+{
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.moroshka"
+      ]
+    }
+  ],
+  "dependencies": {
+    "com.moroshka.collections": "file:../../upm",
+    "com.unity.ide.rider": "3.0.36",
+    "com.unity.test-framework": "1.5.1",
+    "com.unity.test-framework.performance": "3.1.0",
+    "com.unity.testtools.codecoverage": "1.2.6"
+  }
+}

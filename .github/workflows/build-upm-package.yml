@@ -1,0 +1,85 @@
+name: Build UPM Package
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-upm-package:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Get package version
+      id: package-version
+      run: |
+        VERSION=$(jq -r '.version' upm/package.json)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Package version: $VERSION"
+
+    - name: Extract release notes
+      id: release-notes
+      run: |
+        VERSION="${{ steps.package-version.outputs.version }}"
+        echo "Extracting release notes for version $VERSION"
+
+        # Extract changelog section for the specific version
+        RELEASE_NOTES=$(sed -n "/^## \[$VERSION\]/,/^## \[/p" upm/CHANGELOG.md | sed '$d' | tail -n +2)
+
+        # If no specific version found, extract the first version section
+        if [ -z "$RELEASE_NOTES" ]; then
+          RELEASE_NOTES=$(sed -n '/^## \[/,/^## \[/p' upm/CHANGELOG.md | sed '$d' | tail -n +1)
+        fi
+
+        # Save to GitHub output using EOF delimiter
+        echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+        echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+
+    - name: Create UPM package archive
+      run: |
+        # Create tgz archive from upm folder
+        cd upm
+        tar -czf ../com.moroshka.collections-${{ steps.package-version.outputs.version }}.tgz \
+          --exclude='.git*' \
+          --exclude='*.log' \
+          --exclude='*~' \
+          --transform='s,^,package/,' \
+          .
+        cd ..
+
+        # Verify that archive was created
+        ls -la com.moroshka.collections-*.tgz
+
+        # Show archive contents
+        echo "Archive contents:"
+        tar -tzf com.moroshka.collections-${{ steps.package-version.outputs.version }}.tgz
+
+    - name: Upload UPM package artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: com.moroshka.collections-${{ steps.package-version.outputs.version }}
+        path: com.moroshka.collections-${{ steps.package-version.outputs.version }}.tgz
+        retention-days: 90
+
+    - name: Upload to release (if tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: com.moroshka.collections-${{ steps.package-version.outputs.version }}.tgz
+        name: ${{ github.ref_name }}
+        body: ${{ steps.release-notes.outputs.release_notes }}
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

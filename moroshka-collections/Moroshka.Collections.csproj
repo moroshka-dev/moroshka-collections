@@ -1,0 +1,78 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <LangVersion>9</LangVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Moroshka.Collections</Title>
+        <Authors>Moroshka</Authors>
+        <Copyright>Copyright (c) 2025 Moroshka</Copyright>
+        <RepositoryType>Git</RepositoryType>
+        <Version>1.0.0</Version>
+        <PackageId>Moroshka.Collections</PackageId>
+        <RepositoryUrl>https://github.com/moroshka-game/moroshka-collections.git</RepositoryUrl>
+        <Description>The `Moroshka.Collections` module provides high-performance collections and capacity management for predictable memory management.</Description>
+        <PackageProjectUrl>https://github.com/moroshka-game/moroshka-collections</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>unity</PackageTags>
+        <PackageReleaseNotes>https://github.com/moroshka-game/moroshka-collections/blob/main/upm/CHANGELOG.md</PackageReleaseNotes>
+        <RootNamespace>Moroshka.Collections</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\.github\README.md">
+          <Pack>true</Pack>
+          <PackagePath>\</PackagePath>
+          <Link>Docs\README.md</Link>
+        </None>
+        <None Include="..\LICENSE.md">
+          <Pack>true</Pack>
+          <PackagePath>\</PackagePath>
+          <Link>Docs\LICENSE.md</Link>
+        </None>
+        <None Remove="Runtime\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Moroshka.Xcp" Version="1.0.0" />
+      <PackageReference Include="Moroshka.Protect" Version="1.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Runtime\**" />
+      <Compile Include="..\upm\Runtime\AssociationRegistry\AssociationRegistry.cs">
+        <Link>Runtime\Binder\AssociationRegistry.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\AssociationRegistry\IAssociationRegistry.cs">
+        <Link>Runtime\Binder\IAssociationRegistry.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\AssociationRegistry\IKeyAssociation.cs">
+        <Link>Runtime\Binder\IKeyAssociation.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\AssociationRegistry\KeyAssociation.cs">
+        <Link>Runtime\Binder\KeyAssociation.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\CapacityStrategy\CapacityStrategy.cs">
+        <Link>Runtime\CapacityStrategy\CapacityStrategy.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\CapacityStrategy\ICapacityStrategy.cs">
+        <Link>Runtime\CapacityStrategy\ICapacityStrategy.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Exception\OutOfCapacityException.cs">
+        <Link>Runtime\Exception\OutOfCapacityException.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\FastList\FastList.cs">
+        <Link>Runtime\FastList\FastList.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\FastList\FastList_Enumerator.cs">
+        <Link>Runtime\FastList\FastList_Enumerator.cs</Link>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Runtime\**" />
+    </ItemGroup>
+
+</Project>

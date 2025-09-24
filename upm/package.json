@@ -1,0 +1,29 @@
+{
+  "name": "com.moroshka.collections",
+  "displayName": "Moroshka.Collections",
+  "version": "1.0.0",
+  "description": "The `Moroshka.Collections` module provides high-performance collections and capacity management for predictable memory management.",
+  "unity": "6000.2",
+  "unityRelease": "0f1",
+  "author": {
+    "name": "Moroshka",
+    "email": "epishev.m@mail.ru"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "com.moroshka.xcp": "1.0.1",
+    "com.moroshka.protect": "1.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "AssociationRegistry",
+      "description": "Contains sample of using AssociationRegistry.",
+      "path": "Samples~/AssociationRegistry"
+    },
+    {
+      "displayName": "FastList",
+      "description": "Contains sample of using FastList.",
+      "path": "Samples~/FastList"
+    }
+  ]
+}

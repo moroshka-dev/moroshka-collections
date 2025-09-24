@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>disable</Nullable>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+      <PackageReference Include="NUnit" Version="4.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\moroshka-collections\Moroshka.Collections.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Include="..\upm\Tests\AssociationRegistryTests.cs">
+        <Link>Tests\AssociationRegistryTests.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Tests\KeyAssociationTests.cs">
+        <Link>Tests\KeyAssociationTests.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Tests\CapacityStrategyTests.cs">
+        <Link>Tests\CapacityStrategyTests.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Tests\FastListTests.cs">
+        <Link>Tests\FastListTests.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Tests\OutOfCapacityExceptionTests.cs">
+        <Link>Tests\OutOfCapacityExceptionTests.cs</Link>
+      </Compile>
+    </ItemGroup>
+
+</Project>

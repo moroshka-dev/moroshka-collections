@@ -1,0 +1,17 @@
+{
+  "name": "Moroshka.Collections",
+  "rootNamespace": "Moroshka.Collections",
+  "references": [
+    "Moroshka.Xcp",
+    "Moroshka.Protect"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

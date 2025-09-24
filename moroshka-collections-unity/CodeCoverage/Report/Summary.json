@@ -1,0 +1,28 @@
+{
+  "summary": {
+    "generatedon": "2025-10-03T08:33:49Z",
+    "parser": "MultiReportParser (2x OpenCoverParser)",
+    "assemblies": 1,
+    "classes": 5,
+    "files": 6,
+    "coveredlines": 142,
+    "uncoveredlines": 0,
+    "coverablelines": 142,
+    "totallines": 506,
+    "linecoverage": 100,
+    "coveredbranches": 0,
+    "totalbranches": 0,
+    "coveredmethods": 46,
+    "totalmethods": 46,
+    "methodcoverage": 100
+ },
+  "coverage": {
+    "assemblies": [
+      { "name": "Moroshka.Collections", "classes": 5, "coverage": 100, "coveredlines": 142, "coverablelines": 142, "totallines": 506, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 46, "totalmethods": 46, "classesinassembly": [
+        { "name": "Moroshka.Collections.AssociationRegistry[TKey,TValue]", "coverage": 100, "coveredlines": 33, "coverablelines": 33, "totallines": 102, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 7, "totalmethods": 7 },
+        { "name": "Moroshka.Collections.CapacityStrategy", "coverage": 100, "coveredlines": 9, "coverablelines": 9, "totallines": 61, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 2, "totalmethods": 2 },
+        { "name": "Moroshka.Collections.FastList[T]", "coverage": 100, "coveredlines": 64, "coverablelines": 64, "totallines": 205, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 24, "totalmethods": 24 },
+        { "name": "Moroshka.Collections.KeyAssociation[TKey,TValue]", "coverage": 100, "coveredlines": 25, "coverablelines": 25, "totallines": 85, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 7, "totalmethods": 7 },
+        { "name": "Moroshka.Collections.OutOfCapacityException", "coverage": 100, "coveredlines": 11, "coverablelines": 11, "totallines": 53, "branchcoverage": null, "coveredbranches": 0, "totalbranches": 0, "methodcoverage": 100, "coveredmethods": 6, "totalmethods": 6 } ] } ]
+  }
+}
