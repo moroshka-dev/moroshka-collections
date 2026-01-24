@@ -6,11 +6,11 @@
       "source": "local",
       "dependencies": {
         "com.moroshka.xcp": "1.0.1",
-        "com.moroshka.protect": "1.0.0"
+        "com.moroshka.protect": "1.1.0"
       }
     },
     "com.moroshka.protect": {
-      "version": "1.0.0",
+      "version": "1.1.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
