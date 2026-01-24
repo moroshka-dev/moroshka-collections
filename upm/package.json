@@ -1,7 +1,7 @@
 {
   "name": "com.moroshka.collections",
   "displayName": "Moroshka.Collections",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The `Moroshka.Collections` module provides high-performance collections and capacity management for predictable memory management.",
   "unity": "6000.2",
   "unityRelease": "0f1",
