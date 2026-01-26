@@ -15,6 +15,8 @@ public class KeyAssociation<TKey, TValue> : IKeyAssociation<TKey, TValue>
 	where TKey : class
 	where TValue : class
 {
+	protected readonly ICapacityStrategy CapacityStrategy;
+
 	private readonly FastList<TValue> _values;
 	protected bool IsDisposed;
 
@@ -28,6 +30,7 @@ public class KeyAssociation<TKey, TValue> : IKeyAssociation<TKey, TValue>
 	{
 		this.Require(capacityStrategy, nameof(capacityStrategy), Is.Not.Null);
 		this.Require(key, nameof(key), Is.Not.Null);
+		CapacityStrategy = capacityStrategy;
 		_values = new FastList<TValue>(1, capacityStrategy);
 		Key = key;
 	}

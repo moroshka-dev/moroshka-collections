@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Moroshka.Protect;
 using NUnit.Framework;
 using Is = NUnit.Framework.Is;
@@ -157,6 +157,39 @@ internal sealed class KeyAssociationTests
 		// Assert
 		Assert.That(binding.Values, Is.EquivalentTo(new[] { "Value1", "Value2" }));
 	}
+
+	[Test]
+	public void CapacityStrategy_IsInitializedCorrectly()
+	{
+		// Arrange
+		const string key = "TestKey";
+		var testCapacityStrategy = new CapacityStrategy();
+
+		// Act
+		var testBinding = new TestKeyAssociation<string, string>(testCapacityStrategy, key);
+
+		// Assert
+		Assert.That(testBinding.GetCapacityStrategy(), Is.SameAs(testCapacityStrategy));
+		Assert.That(testBinding.GetCapacityStrategy(), Is.Not.Null);
+	}
+
+	[Test]
+	public void CapacityStrategy_IsUsedForInternalList()
+	{
+		// Arrange
+		const string key = "TestKey";
+		var customStrategy = new TestCapacityStrategy();
+		var binding = new KeyAssociation<string, string>(customStrategy, key);
+
+		// Act
+		binding.To("Value1");
+		binding.To("Value2");
+		binding.To("Value3");
+
+		// Assert
+		Assert.That(binding.Count, Is.EqualTo(3));
+		Assert.That(customStrategy.CalculateCapacityCallCount, Is.GreaterThan(0));
+	}
 }
 
 public class TestDisposable : IDisposable
@@ -167,6 +200,33 @@ public class TestDisposable : IDisposable
 	{
 		IsDisposed = true;
 		GC.SuppressFinalize(this);
+	}
+}
+
+internal sealed class TestKeyAssociation<TKey, TValue> : KeyAssociation<TKey, TValue>
+	where TKey : class
+	where TValue : class
+{
+	public TestKeyAssociation(ICapacityStrategy capacityStrategy, TKey key)
+		: base(capacityStrategy, key)
+	{
+	}
+
+	public ICapacityStrategy GetCapacityStrategy()
+	{
+		return CapacityStrategy;
+	}
+}
+
+internal sealed class TestCapacityStrategy : ICapacityStrategy
+{
+	public int CalculateCapacityCallCount { get; private set; }
+
+	public int CalculateCapacity(int currentCapacity, int requiredSize)
+	{
+		CalculateCapacityCallCount++;
+		if (currentCapacity >= requiredSize) return currentCapacity;
+		return Math.Max(currentCapacity * 2, requiredSize);
 	}
 }
 
