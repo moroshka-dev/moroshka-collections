@@ -24,6 +24,11 @@
       "displayName": "FastList",
       "description": "Contains sample of using FastList.",
       "path": "Samples~/FastList"
+    },
+    {
+      "displayName": "Registry",
+      "description": "Contains sample of using Registry.",
+      "path": "Samples~/Registry"
     }
   ]
 }

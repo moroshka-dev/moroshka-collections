@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 1345146559}
   - component: {fileID: 1345146560}
   m_Layer: 0
-  m_Name: RegistryIndexSample
+  m_Name: RegistrySample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
