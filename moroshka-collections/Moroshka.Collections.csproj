@@ -41,18 +41,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Runtime\**" />
+      <EmbeddedResource Remove="Runtime\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Include="..\upm\Runtime\AssociationRegistry\AssociationRegistry.cs">
-        <Link>Runtime\Binder\AssociationRegistry.cs</Link>
+        <Link>Runtime\AssociationRegistry\AssociationRegistry.cs</Link>
       </Compile>
       <Compile Include="..\upm\Runtime\AssociationRegistry\IAssociationRegistry.cs">
-        <Link>Runtime\Binder\IAssociationRegistry.cs</Link>
+        <Link>Runtime\AssociationRegistry\IAssociationRegistry.cs</Link>
       </Compile>
       <Compile Include="..\upm\Runtime\AssociationRegistry\IKeyAssociation.cs">
-        <Link>Runtime\Binder\IKeyAssociation.cs</Link>
+        <Link>Runtime\AssociationRegistry\IKeyAssociation.cs</Link>
       </Compile>
       <Compile Include="..\upm\Runtime\AssociationRegistry\KeyAssociation.cs">
-        <Link>Runtime\Binder\KeyAssociation.cs</Link>
+        <Link>Runtime\AssociationRegistry\KeyAssociation.cs</Link>
       </Compile>
       <Compile Include="..\upm\Runtime\CapacityStrategy\CapacityStrategy.cs">
         <Link>Runtime\CapacityStrategy\CapacityStrategy.cs</Link>
@@ -69,10 +72,27 @@
       <Compile Include="..\upm\Runtime\FastList\FastList_Enumerator.cs">
         <Link>Runtime\FastList\FastList_Enumerator.cs</Link>
       </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Runtime\**" />
+      <Compile Include="..\upm\Runtime\Registry\Exeprion\RegistryIndexBuildException.cs">
+        <Link>Runtime\Registry\Exeprion\RegistryIndexBuildException.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\Extensions\RegistryIndexExtensions.cs">
+        <Link>Runtime\Registry\Extensions\RegistryIndexExtensions.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\IRegistryIndex.cs">
+        <Link>Runtime\Registry\IRegistryIndex.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\IRegistryItem.cs">
+        <Link>Runtime\Registry\IRegistryItem.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\RegistryIndex.cs">
+        <Link>Runtime\Registry\RegistryIndex.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\RegistryItemRef.cs">
+        <Link>Runtime\Registry\RegistryItemRef.cs</Link>
+      </Compile>
+      <Compile Include="..\upm\Runtime\Registry\RegistryItemRefOfT.cs">
+        <Link>Runtime\Registry\RegistryItemRefOfT.cs</Link>
+      </Compile>
     </ItemGroup>
 
 </Project>

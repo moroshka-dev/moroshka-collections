@@ -20,6 +20,9 @@
       <Compile Include="..\upm\Tests\AssociationRegistryTests.cs">
         <Link>Tests\AssociationRegistryTests.cs</Link>
       </Compile>
+      <Compile Include="..\upm\Tests\RegistryTests.cs">
+        <Link>Tests\RegistryTests.cs</Link>
+      </Compile>
       <Compile Include="..\upm\Tests\KeyAssociationTests.cs">
         <Link>Tests\KeyAssociationTests.cs</Link>
       </Compile>

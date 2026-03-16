@@ -6,6 +6,8 @@
 - [Основные коллекции](#основные-коллекции)
   - [FastList](#fastlist)
   - [AssociationRegistry](#associationregistry)
+  - [RegistryIndex](#registryindex)
+  - [RegistryItemRef](#registryitemref)
 - [Управление емкостью](#управление-емкостью)
 - [Обработка ошибок](#обработка-ошибок)
 - [Производительность](#производительность)
@@ -152,6 +154,73 @@ using (var itemRegistry = new AssociationRegistry<string, Item>(new CapacityStra
 }
 ```
 
+### RegistryIndex
+
+`RegistryIndex` - индекс реестра для поиска зарегистрированных элементов по типу и имени. Индекс строится в два этапа: сначала регистрация через `Register(...)`, затем построение таблиц поиска через `Build()`.
+
+#### Когда использовать RegistryIndex
+
+- Когда нужны быстрые выборки по типу (`All(typeof(T))` / `All<T>()`)
+- Когда нужен точечный поиск по имени в рамках типа (`Find(...)` / `Find<T>(...)`)
+- Когда допустимы одинаковые имена у разных типов, но не внутри одного типа
+
+#### Базовый пример использования
+
+```csharp
+public sealed class WeaponDefinition : IRegistryItem
+{
+    public string Name { get; set; }
+    public int Damage { get; set; }
+}
+
+public sealed class PotionDefinition : IRegistryItem
+{
+    public string Name { get; set; }
+    public int Heal { get; set; }
+}
+
+var index = new RegistryIndex();
+index.Register(
+    new WeaponDefinition { Name = "Sword", Damage = 10 },
+    new WeaponDefinition { Name = "Bow", Damage = 7 },
+    new PotionDefinition { Name = "Sword", Heal = 25 } // одно имя с другим типом допустимо
+);
+
+index.Build();
+
+var allItems = index.All();
+var weapons = index.All<WeaponDefinition>();
+var sword = index.Find<WeaponDefinition>("Sword");
+var missing = index.Find<WeaponDefinition>("Axe"); // null
+```
+
+#### Важные детали
+
+- До вызова `Build()` типизированные выборки и поиск не готовы к использованию
+- Дубликаты `Name` внутри одного типа приводят к `RegistryIndexBuildException`
+- Метод `All()` возвращает все зарегистрированные элементы без фильтрации по типу
+
+### RegistryItemRef
+
+`RegistryItemRef` и `RegistryItemRef<T>` - это ссылки на элемент реестра по имени. Они удобны, когда нужно хранить "лёгкую" ссылку и разрешать её в объект только при первом доступе.
+
+#### Пример использования
+
+```csharp
+public sealed class WeaponRef : RegistryItemRef<WeaponDefinition>
+{
+    public WeaponRef(IRegistryIndex index, string name) : base(index, name)
+    {
+    }
+}
+
+var weaponRef = new WeaponRef(index, "Sword");
+var weaponA = weaponRef.Resolve(); // первый поиск через index.Find<T>(...)
+var weaponB = weaponRef.Resolve(); // возвращается кэшированное значение
+
+WeaponDefinition weaponC = weaponRef; // неявная конверсия через Resolve()
+```
+
 ## Управление емкостью
 
 ### CapacityStrategy
@@ -190,6 +259,27 @@ catch (OutOfCapacityException ex)
 {
     Console.WriteLine($"Требуемая емкость: {ex.RequiredSize}");
     Console.WriteLine($"Текущая емкость: {ex.CurrentCapacity}");
+}
+```
+
+### RegistryIndexBuildException
+
+При ошибке построения индекса (обычно из-за повторяющихся имён внутри одного типа) выбрасывается `RegistryIndexBuildException`.
+
+```csharp
+try
+{
+    var index = new RegistryIndex();
+    index.Register(
+        new WeaponDefinition { Name = "Sword" },
+        new WeaponDefinition { Name = "Sword" } // дубликат в рамках одного типа
+    );
+    index.Build();
+}
+catch (RegistryIndexBuildException ex)
+{
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.InnerException?.Message);
 }
 ```
 

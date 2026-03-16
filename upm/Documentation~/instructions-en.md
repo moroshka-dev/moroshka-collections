@@ -6,6 +6,8 @@
 - [Main Collections](#main-collections)
   - [FastList](#fastlist)
   - [AssociationRegistry](#associationregistry)
+  - [RegistryIndex](#registryindex)
+  - [RegistryItemRef](#registryitemref)
 - [Capacity Management](#capacity-management)
 - [Error Handling](#error-handling)
 - [Performance](#performance)
@@ -152,6 +154,73 @@ using (var itemRegistry = new AssociationRegistry<string, Item>(new CapacityStra
 }
 ```
 
+### RegistryIndex
+
+`RegistryIndex` is a registry index for searching registered items by type and name. The index is built in two phases: register items with `Register(...)`, then build lookup tables with `Build()`.
+
+#### When to use RegistryIndex
+
+- When you need fast type-based queries (`All(typeof(T))` / `All<T>()`)
+- When you need point lookups by name within a type (`Find(...)` / `Find<T>(...)`)
+- When same names across different types are acceptable, but duplicates within one type are not
+
+#### Basic usage example
+
+```csharp
+public sealed class WeaponDefinition : IRegistryItem
+{
+    public string Name { get; set; }
+    public int Damage { get; set; }
+}
+
+public sealed class PotionDefinition : IRegistryItem
+{
+    public string Name { get; set; }
+    public int Heal { get; set; }
+}
+
+var index = new RegistryIndex();
+index.Register(
+    new WeaponDefinition { Name = "Sword", Damage = 10 },
+    new WeaponDefinition { Name = "Bow", Damage = 7 },
+    new PotionDefinition { Name = "Sword", Heal = 25 } // same name for a different type is allowed
+);
+
+index.Build();
+
+var allItems = index.All();
+var weapons = index.All<WeaponDefinition>();
+var sword = index.Find<WeaponDefinition>("Sword");
+var missing = index.Find<WeaponDefinition>("Axe"); // null
+```
+
+#### Important details
+
+- Typed queries and lookups are not ready until `Build()` is called
+- Duplicate `Name` values within the same type cause `RegistryIndexBuildException`
+- `All()` returns all registered items without type filtering
+
+### RegistryItemRef
+
+`RegistryItemRef` and `RegistryItemRef<T>` are name-based references to registry items. They are useful when you want to store a lightweight reference and resolve it to an object on first access.
+
+#### Usage example
+
+```csharp
+public sealed class WeaponRef : RegistryItemRef<WeaponDefinition>
+{
+    public WeaponRef(IRegistryIndex index, string name) : base(index, name)
+    {
+    }
+}
+
+var weaponRef = new WeaponRef(index, "Sword");
+var weaponA = weaponRef.Resolve(); // first lookup via index.Find<T>(...)
+var weaponB = weaponRef.Resolve(); // cached value is returned
+
+WeaponDefinition weaponC = weaponRef; // implicit conversion via Resolve()
+```
+
 ## Capacity Management
 
 ### CapacityStrategy
@@ -190,6 +259,27 @@ catch (OutOfCapacityException ex)
 {
     Console.WriteLine($"Required capacity: {ex.RequiredSize}");
     Console.WriteLine($"Current capacity: {ex.CurrentCapacity}");
+}
+```
+
+### RegistryIndexBuildException
+
+When index building fails (typically because of duplicate names inside one type), `RegistryIndexBuildException` is thrown.
+
+```csharp
+try
+{
+    var index = new RegistryIndex();
+    index.Register(
+        new WeaponDefinition { Name = "Sword" },
+        new WeaponDefinition { Name = "Sword" } // duplicate within one type
+    );
+    index.Build();
+}
+catch (RegistryIndexBuildException ex)
+{
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.InnerException?.Message);
 }
 ```
 
